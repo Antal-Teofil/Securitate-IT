@@ -228,19 +228,18 @@ class CIFF:
                 # interpret the bytes as an 8-byte-long integer
                 # HINT: check out the "q" format specifier!
                 # HINT: Does it fit our purposes?
-                new_ciff.content_size = struct.unpack("q", c_size)[0]
+                new_ciff.content_size = struct.unpack("Q", c_size)[0]
                 # the content size must be in [0, 2^64 - 1]
                 # TODO: check the value range. If not in range, raise Exception
                 # Question: is this check necessary?
-                #if new_ciff.content_size < ____ or \
-                #        new_ciff.content_size > ____:
-                #    ____
+                if new_ciff.content_size < 0 or new_ciff.content_size > 2**64-1:
+                    raise ValueError("Invalid value")
 
                 # read the width
                 width = ciff_file.read(8)
                 # TODO: check if width contains 8 bytes
-                #if ____ != ____:
-                #    ____
+                if len(width) != 8:
+                    raise EOFError("Width must contain 8 bytes")
                 bytes_read += 8
                 # interpret the bytes as an 8-byte-long integer
                 # HINT: check out the "q" format specifier!
@@ -249,14 +248,14 @@ class CIFF:
                 # the width must be in [0, 2^64 - 1]
                 # TODO: check the value range. If not in range, raise Exception
                 # Question: is this check necessary?
-                #if ____:
-                #    ____
+                if new_ciff.width < 0 or new_ciff.width > 2**64 - 1:
+                    raise ValueError("Invalid value")
 
                 # read the height
                 height = ciff_file.read(8)
                 # TODO: check if height contains 8 bytes
-                #if ____:
-                #    ____
+                if len(height) != 8:
+                    raise EOFError("Height must containe 8 bytes")
                 bytes_read += 8
                 # interpret the bytes as an 8-byte-long integer
                 # HINT: check out the "q" format specifier!
@@ -265,19 +264,19 @@ class CIFF:
                 # the height must be in [0, 2^64 - 1]
                 # TODO: check the value range
                 # Question: is this check necessary?
-                #____
-                #    ____
+                if new_ciff.height < 0 or new_ciff.height > 2**64-1:
+                    raise ValueError("Invalid value")
 
                 # TODO: content size must equal width*height*3
-                #if ____:
-                #    ____
+                if new_ciff.content_size != new_ciff.width * new_ciff.height * 3:
+                    raise ValueError("Invalid value")
 
                 # read the name of the image character by character
                 caption = ""
                 c = ciff_file.read(1)
                 # TODO: check if c contains 1 byte
-                #___
-                #    ____
+                if len(c) != 1:
+                    raise EOFError("Character must containe 1 byte")
                 bytes_read += 1
                 char = c.decode('ascii')
                 # read until the first '\n' (caption cannot contain '\n')
@@ -286,9 +285,8 @@ class CIFF:
                     caption += char
                     # read next character
                     c = ciff_file.read(1)
-                    # TODO: check if c contains 1 byte
-                    #___
-                    #    ____
+                    if len(c) != 1:
+                        raise EOFError("C must containe 1 byte")
                     bytes_read += 1
                     char = c.decode('ascii')
                 new_ciff.caption = caption
