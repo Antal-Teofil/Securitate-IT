@@ -193,38 +193,37 @@ class CIFF:
                 magic = ciff_file.read(4)
                 # read may not return the requested number of bytes
                 # TODO: magic must contain 4 bytes. If not, raise Exception
-                #if len(magic) != ____:
-                #    raise Exception(____)
+                if len(magic) != 4:
+                    raise EOFError("Magic must contain exactly 4 bytes")
                 bytes_read += 4
                 # decode the bytes as 4 characters
                 new_ciff.magic = magic.decode('ascii')
                 # TODO: the magic must be "CIFF". If not, raise Exception
-                #if new_ciff.magic != ____:
+                if new_ciff.magic != "CIFF":
                 #    new_ciff.is_valid = ____
-                #    raise ____
+                    raise ValueError("Invalid value")
 
                 # read the header size
                 h_size = ciff_file.read(8)
                 # TODO: h_size must contain 8 bytes. If not, raise Exception
-                #if len(____) != ____:
-                #    raise ____
+                if len(h_size) != 8:
+                    raise EOFError("Header must containe exactly 8 buytes")
                 bytes_read += 8
                 # interpret the bytes as an 8-byte-long integer
                 # unpack returns a list
                 # HINT: check the "q" format specifier!
                 # HINT: Does it fit our purposes?
-                new_ciff.header_size = struct.unpack("q", h_size)[0]
+                new_ciff.header_size = struct.unpack("Q", h_size)[0]
                 # the header size must be in [38, 2^64 - 1]
                 # TODO: check the value range. If not in range, raise Exception
-                #if new_ciff.header_size < ____ \
-                #        or new_ciff.header_size > ____:
-                #    ____
+                if new_ciff.header_size < 38 or new_ciff.header_size > 2**64 - 1:
+                    raise ValueError("Invalid value")
 
                 # read the content size
                 c_size = ciff_file.read(8)
                 # TODO: c_size must contain 8 bytes. If not, raise Exception
-                #if len(____) != ____:
-                #    ____
+                if len(c_size) != 8:
+                    raise EOFError("Content size must contain 8 bytes")
                 bytes_read += 8
                 # interpret the bytes as an 8-byte-long integer
                 # HINT: check out the "q" format specifier!
