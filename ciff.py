@@ -292,20 +292,20 @@ class CIFF:
                 new_ciff.caption = caption
 
                 # read all the tags
-                tags = list()
+                tags = []
                 # read until the end of the header
                 tag = ""
                 while bytes_read != new_ciff.header_size:
                     c = ciff_file.read(1)
                     # TODO: check if c contains 1 byte
                     if len(c) != 1:
-                        raise Exception("Invalid image")
+                        raise EOFError("Invalid image")
                     bytes_read += 1
                     char = c.decode('ascii')
                     # tags should not contain '\n'
                     # TODO: char must not be a '\n'
-                    #if ____ == ____:
-                    #    ____
+                    if char == '\n':
+                        raise ValueError("Char must not be equal to '\n'")
                     # tags are separated by terminating nulls
                     tag += char
                     if char == '\0':
@@ -313,14 +313,14 @@ class CIFF:
                         tag = ""
                     # the very last character in the header must be a '\0'
                     # TODO: check the last character of the header
-                    #if (bytes_read == ____) and ____:
-                    #    ____
+                    if (bytes_read == new_ciff.header_size) and char != '\0':
+                        raise ValueError("Invalid size or character")
                 
                 # all tags must end with '\0'
                 # TODO: check the end of each tag for the '\0'
-                #for tag in tags:
-                #    if tag[____] != ____:
-                #        ____
+                for tag in tags:
+                    if tag[-1] != '\0':
+                        raise ValueError("Value must not be equalt to '\0'")
 
                 new_ciff.tags = tags
                 
@@ -328,17 +328,17 @@ class CIFF:
                 while bytes_read < new_ciff.header_size+new_ciff.content_size:
                     c = ciff_file.read(3)
                     # TODO: check if c contains 3 bytes
-                    #___
-                    #    ____
+                    if len(c) != 3:
+                        raise EOFError("C must containe 3 bytes")
                     bytes_read += 3
                     pixel = struct.unpack("BBB", c)
                     new_ciff.pixels.append(pixel)
 
                 # we should have reached the end of the file
                 # TODO: try to read a byte. If successful, raise Exception
-                #____
-                #____
-                #    ____
+                extra = ciff_file.read(1)
+                if len(extra) != 0:
+                    raise EOFError("Invalid image")
 
         except Exception as e:
             print("Error occured: ", e)
