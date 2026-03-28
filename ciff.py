@@ -244,7 +244,7 @@ class CIFF:
                 # interpret the bytes as an 8-byte-long integer
                 # HINT: check out the "q" format specifier!
                 # HINT: Does it fit our purposes?
-                new_ciff.width = struct.unpack("q", width)[0]
+                new_ciff.width = struct.unpack("<Q", width)[0]
                 # the width must be in [0, 2^64 - 1]
                 # TODO: check the value range. If not in range, raise Exception
                 # Question: is this check necessary?
@@ -260,7 +260,7 @@ class CIFF:
                 # interpret the bytes as an 8-byte-long integer
                 # HINT: check out the "q" format specifier!
                 # HINT: Does it fit our purposes?
-                new_ciff.height = struct.unpack("q", height)[0]
+                new_ciff.height = struct.unpack("<Q", height)[0]
                 # the height must be in [0, 2^64 - 1]
                 # TODO: check the value range
                 # Question: is this check necessary?
