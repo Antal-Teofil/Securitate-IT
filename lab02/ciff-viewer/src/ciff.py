@@ -282,7 +282,7 @@ class CIFF:
                 new_ciff.caption = caption
 
                 # read all the tags
-                tags = list()
+                tags: List[str] = list()
                 # read until the end of the header
                 tag: str = ""
                 while bytes_read != new_ciff.header_size:
