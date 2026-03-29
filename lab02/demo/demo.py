@@ -22,5 +22,5 @@ class BankAccount:
 
 account = BankAccount("Dagobert Duck", (12345678,87654321,00000000), 15)
 account.withdraw(5)
-# account.deposit("test")
+account.deposit("test")
 print(account)
