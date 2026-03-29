@@ -228,7 +228,7 @@ class CIFF:
                     raise Exception("Invalid content size")
                 bytes_read += 8
                 # interpret the bytes as an 8-byte-long integer
-                new_ciff.content_size = struct.unpack("Q", c_size)[0]
+                new_ciff.content_size = struct.unpack("q", c_size)[0]
                 # the content size must be in [0, 2^64 - 1]
                 if new_ciff.content_size < 0 or new_ciff.content_size > (2**64)-1:
                     raise Exception("Invalid content size")
