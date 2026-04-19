@@ -85,3 +85,15 @@ int main(int argc, char** argv) {
 
     return 0;
 }
+/*
+7.
+
+1. strcpy() helyett strncpy() vagy snprintf()
+2. ellenorizzuk a bemenet hosszat
+3. erdemes bekapcsolni a -fstack-protector-all vedelmet, a -pie
+4. ASLR bekapcsolasa
+*/
+
+/*
+Amikor make withSSP-vel fordítod, a fordító a stackre betesz egy canary nevű védőértéket a lokális puffer és a fontos vezérlési adatok közé. A függvény végén, visszatérés előtt ellenőrzi, hogy ez az érték megváltozott-e.
+*/
